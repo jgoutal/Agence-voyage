@@ -4,6 +4,12 @@ const sql = require("./db.js");
 const Billet = function(billet) {
   this.GareArrivee = billet.GareArrivee;
   this.GareDepart = billet.GareDepart;
+  this.HeureDepart = billet.HeureDepart;
+  this.HeureArrivee = billet.HeureArrivee;
+  this.DateDepart = billet.DateDepart;
+  this.DateArrivee = billet.DateArrivee;
+  this.VilleDestination = billet.VilleDestination;
+  this.VilleDepart = billet.VilleDepart
   this.Prix = billet.Prix;
 };
 
@@ -15,13 +21,13 @@ Billet.create = (newBillet, result) => {
       return;
     }
 
-    console.log("created billet: ", { id: res.insertId, ...newBillet });
-    result(null, { id: res.insertId, ...newBillet });
+    console.log("created billet: ", { idBillet: res.insertId, ...newBillet });
+    result(null, { idBillet: res.insertId, ...newBillet });
   });
 };
 
-Billet.findById = (id, result) => {
-  sql.query(`SELECT * FROM Billet WHERE idBillet = ${id}`, (err, res) => {
+Billet.findById = (idBillet, result) => {
+  sql.query(`SELECT * FROM Billet WHERE idBillet = ${idBillet}`, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);

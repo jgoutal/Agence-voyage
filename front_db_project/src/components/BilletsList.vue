@@ -22,7 +22,9 @@
           :key="index"
           @click="setActiveBillet(billet, index)"
         >
-          Arrivée : {{ billet.GareArrivee }}
+          Date Depart: {{billet.DateDepart}}
+          <br/>
+          Arrivée : {{ billet.VilleDestination }}
         </li>
       </ul>
 
@@ -55,10 +57,13 @@
           <label><strong>Heure Arrivee:</strong></label> {{ currentBillet.HeureArrivee}}
         </div>
         <div>
+          <label><strong>Ville depart:</strong></label> {{ currentBillet.VilleDepart}}
+        </div>
+        <div>
           <label><strong>Destination :</strong></label> {{ currentBillet.VilleDestination}}
         </div>
 
-        <router-link :to="'/billets/' + currentBillet.idBillet" class="badge badge-warning" style="width: 20px height:10px">Edit</router-link>
+        <router-link :to="'/billets/' + currentBillet.idBillet" :id="currentBillet.idBillet" class="badge badge-seecondary" style="width: 20px height:10px">Acheter</router-link>
       </div>
     </div>
   </div>
@@ -74,6 +79,7 @@ export default {
       billets: [],
       currentBillet: null,
       currentIndex: -1,
+      VilleArrivee: null,
     };
   },
   methods: {

@@ -89,7 +89,7 @@ export default {
   },
   mounted() {
     this.message = '';
-    this.getBillet(this.$route.params.idBillet);
+    this.getBillet(this.$route.params.id);
   }
 };
 </script>
