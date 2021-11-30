@@ -1,0 +1,23 @@
+<%- include('header') %>
+
+<% if (locals.erreur) {%>
+    <div class="ui negative message">
+        <%= erreur %>
+    </div>
+<% } %>
+<% if (locals.requete_vide) {%>
+    <div class="ui message">
+        <%= requete_vide %>
+    </div>
+<% } %>
+<% if (locals.billets_list) {%>
+    <div class="ui segment">
+        <div class="ui relaxed divided list">
+            <% for (x of billets_list) {%>
+                <%- include('billet-element-list', {heure_depart:x.HeureDepart, heure_arrive:x.HeureArrivee, nom_ville_arrive:x.VilleDestination, nom_ville_depart:x.VilleDepart, nom_gare_depart:x.GareDepart, nom_gare_arrive:x.GareDestination, prix_billet:x.Prix, duree:x.Duree, train:x.Train, reduction:50})%>
+            <% } %>
+        </div>
+    </div>
+<% } %>
+
+<%- include('footer') %>

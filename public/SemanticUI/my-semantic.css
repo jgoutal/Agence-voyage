@@ -1,0 +1,13 @@
+.vertical-separate{
+    padding: 10px 0px;
+}
+
+.ui.list>.billet-element.item{
+    display: flex;
+    justify-content: space-between;
+}
+
+.duree{
+    display: flex;
+    align-items: center;
+}

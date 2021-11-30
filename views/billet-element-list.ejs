@@ -1,0 +1,14 @@
+<div class="item billet-element">
+    <div class="">
+        <div class="vertical-separate">Départ: <b><%= heure_depart%></b> <i class="long arrow alternate right icon"></i> <%= nom_ville_depart%> <%= nom_gare_depart%></div>
+        <div class="vertical-separate">Arrivée: <b><%= heure_arrive%></b> <i class="long arrow alternate right icon"></i> <%= nom_ville_arrive%> <%= nom_gare_arrive%></div>
+    </div>
+    <div class="">
+        <div class="vertical-separate">Durée du trajet: <%=duree%></div>
+        <div class="vertical-separate">Numéro du train: <%=train%></div>
+    </div>
+    <div class="">
+        <div class="vertical-separate">Prix général: <%= prix_billet%>€</div>
+        <div class="vertical-separate">Prix après réduction: <%= Math.floor(prix_billet*reduction/100)%>€ (<%= reduction %>%)</div>
+    </div>
+</div>
