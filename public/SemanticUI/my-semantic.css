@@ -46,3 +46,13 @@
 .n-train{
     margin-right: 10px;
 }
+
+.vertical-align{
+    display: flex;
+    align-items: center;
+}
+
+.vertical-align>.billet-link{
+    color: black;
+    font-weight: bold;
+}
