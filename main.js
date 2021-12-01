@@ -27,6 +27,10 @@ app.post('/', (req, res) => {
     }
 })
 
+app.get('/billet/:id', (req, res) => {
+    res.render('./page_billet')
+})
+
 app.listen(PORT, () => {
     console.log(`Connected to ${PORT} `)
 })

@@ -7,7 +7,38 @@
     justify-content: space-between;
 }
 
-.duree{
-    display: flex;
-    align-items: center;
+.titre{
+    text-align: center;
+    margin-bottom: 1.5em;
+}
+
+.gare{
+    margin-bottom: 1em;
+}
+
+.prix{
+    margin-bottom: 2em;
+}
+
+.button-container{
+    text-align: center;
+}
+
+.button-container>.ui.button.red{
+    margin-right: 3em;
+}
+
+.reduction{
+    color:darkred;
+}
+
+.prix-definitif{
+    color:red;
+    font-size: 20px;
+    margin: 0px 20px;
+    font-weight: bolder;
+}
+
+.prix-base{
+    color:dimgray;
 }
