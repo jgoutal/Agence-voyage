@@ -69,25 +69,32 @@ router.post('/index', (req, res) => {
 
 router.get('/index/billet/:id', (req, res) => {
     let getBilletbyId = require('../model/db').getBilletbyId
-    res.locals.currentclient = req.session.currentclient
-    getBilletbyId(req.params.id, (billet, error) => {
+    let findClientByLogin = require('../model/db').findClientByLogin
+    findClientByLogin(req.session.currentclient, (client, error) => {
         if (error) {
-            res.locals.erreur = "SQL Error: SQL error: Not supposed to happend, please use the GUI."
-            res.redirect('/index')
+            console.log(error)
+            res.redirect('/login')
+        } else {
+            res.locals.currentclient = client[0]
+            getBilletbyId(req.params.id, (billet, error) => {
+                if (error) {
+                    res.locals.erreur = "SQL Error: SQL error: Not supposed to happend, please use the GUI."
+                    res.redirect('/index')
+                }
+                let pretty_date = require('../util/date_manipulation').pretty_date
+                billet = billet[0]
+                res.render('./page_billet', {HeureDepart:billet.HeureDepart,
+                                             HeureArrivee:billet.HeureArrivee,
+                                             Prix:billet.Prix,
+                                             Train:billet.Train,
+                                             date:pretty_date(billet.DateDepart),
+                                             GareArrive:billet.GareDestination,
+                                             GareDepart:billet.GareDepart,
+                                             villeDepart:billet.VilleDepart,
+                                             villeArrive:billet.VilleDestination,
+                                             duree:billet.duree})
+            })
         }
-        let pretty_date = require('../util/date_manipulation').pretty_date
-        billet = billet[0]
-        res.render('./page_billet', {HeureDepart:billet.HeureDepart,
-                                     HeureArrivee:billet.HeureArrivee,
-                                     Prix:billet.Prix,
-                                     Train:billet.Train,
-                                     date:pretty_date(billet.DateDepart),
-                                     Reduction:50,
-                                     GareArrive:billet.GareDestination,
-                                     GareDepart:billet.GareDepart,
-                                     villeDepart:billet.VilleDepart,
-                                     villeArrive:billet.VilleDestination,
-                                     duree:billet.duree})
     })
 })
 

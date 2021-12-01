@@ -27,7 +27,7 @@ exports.createClient = (prenom, nom, type, reduction, login, password, cb) => {
 }
 
 exports.findClientByLogin = (login, cb) => {
-    connection.query('SELECT Prenom, Nom, Type, Reduction, login, password  FROM Clients WHERE login=?', [login], (err, res, _field) => {
+    connection.query('SELECT Prenom, Nom, Type, Reduction, Taux, login, password  FROM Clients, Reduction WHERE login=? AND Reduction.idReduction = Clients.Reduction', [login], (err, res, _field) => {
         cb(res, err)
     })
 }

@@ -9,7 +9,7 @@
     </div>
     <div class="">
         <div class="vertical-separate">Prix général: <%= prix_billet%>€</div>
-        <div class="vertical-separate">Prix après réduction: <%= Math.floor(prix_billet*reduction/100)%>€ (<%= reduction %>%)</div>
+        <div class="vertical-separate">Prix après réduction: <%= Math.floor(prix_billet*(100-currentclient.Taux)/100)%>€ (<%= currentclient.Taux %>%)</div>
     </div>
     <div class="vertical-align inverted">
         <a class="billet-link ui button" href="/index/billet/<%= x.idBillet%>">Détail</a>
