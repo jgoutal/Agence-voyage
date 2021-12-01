@@ -1,0 +1,28 @@
+<%- include('header-global')%>
+
+<% if (locals.error) {%>
+    <div class="ui negative message">
+        <%= error %>
+    </div>
+<% } %>
+
+<% if (locals.succes) {%>
+    <div class="ui positive message">
+        <%= succes %>
+    </div>
+<% } %>
+
+<h2>Identifiez-vous</h2>
+<form action="/login" class="ui form" method="POST">
+    <div class="field">
+        <label for="login">Identifiant</label>
+        <input type="text" name="login" id="login" placeholder="Identifiant">
+    </div>
+    <div class="field">
+        <label for="password">Mot de passe</label>
+        <input type="text" name="password" id="password" placeholder="Mot de passe">
+    </div>
+    <div><button class="ui button red" type="submit">Log in</button> <a href="/signup" class="ui button green">Je n'ai pas de compte</a></div>
+</form>
+
+<%- include('footer') %> 
