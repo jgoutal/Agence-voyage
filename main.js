@@ -1,6 +1,7 @@
 let express = require('express')
 let app = express()
 let bodyParser = require('body-parser')
+const Billet = require('./controllers/billet')
 let PORT = 8080
 
 app.set('view engine', 'ejs')
@@ -13,7 +14,7 @@ app.get('/', (req, res) => {
 })
 
 app.post('/', (req, res) => {
-    let getBillet = require('./model/billet-model')
+    let getBillet = require('./model/billet-model').getBillet
     if (req.body.villeArrive === undefined || req.body.villeArrive === "" || req.body.villeDepart === undefined || req.body.villeDepart === "" || req.body.date === undefined || req.body.date === "") {
         res.render("./index", {erreur: "Merci de rentrer toutes les valeurs."})
     } else {
@@ -28,7 +29,22 @@ app.post('/', (req, res) => {
 })
 
 app.get('/billet/:id', (req, res) => {
-    res.render('./page_billet')
+    let getBilletbyId = require('./model/billet-model').getBilletbyId
+    getBilletbyId(req.params.id, (billet) => {
+        let pretty_date = require('./util/date_manipulation').pretty_date
+        billet = billet[0]
+        res.render('./page_billet', {HeureDepart:billet.HeureDepart,
+                                     HeureArrivee:billet.HeureArrivee,
+                                     Prix:billet.Prix,
+                                     Train:billet.Train,
+                                     date:pretty_date(billet.DateDepart),
+                                     Reduction:50,
+                                     GareArrive:billet.GareDestination,
+                                     GareDepart:billet.GareDepart,
+                                     villeDepart:billet.VilleDepart,
+                                     villeArrive:billet.VilleDestination,
+                                     duree:billet.duree})
+    })
 })
 
 app.listen(PORT, () => {
