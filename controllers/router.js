@@ -4,31 +4,40 @@ const router = express.Router()
 
 router.get('/index', (req, res) => {
     let getVilles = require('../model/db').getVilles
-    getVilles((Villes, error) => {
+    let findClientByLogin = require('../model/db').findClientByLogin
+    findClientByLogin(req.session.currentclient, (client, error) => {
         if (error) {
             console.log(error)
-            req.locals.erreur = "SQL Error: Not suppose to happend, please use the GUI."
-            res.render('./index', {Villes:Villes})
+            res.redirect('/login')
         } else {
-            if (req.session.erreur) {
-                res.locals.erreur = req.session.erreur
-                req.session.erreur = undefined
-                res.render('./index', {Villes:Villes})
-            } else {
-                if (req.session.requete_vide) {
-                    res.locals.requete_vide = req.session.requete_vide
-                    req.session.requete_vide = undefined
+            res.locals.currentclient = client[0]
+            getVilles((Villes, error) => {
+                if (error) {
+                    console.log(error)
+                    req.locals.erreur = "SQL Error: Not suppose to happend, please use the GUI."
                     res.render('./index', {Villes:Villes})
                 } else {
-                    if (req.session.billets_list) {
-                        res.locals.billets_list=req.session.billets_list
-                        req.session.billets_list=undefined
-                        res.render("./index", {Villes:Villes})
-                    } else {
+                    if (req.session.erreur) {
+                        res.locals.erreur = req.session.erreur
+                        req.session.erreur = undefined
                         res.render('./index', {Villes:Villes})
+                    } else {
+                        if (req.session.requete_vide) {
+                            res.locals.requete_vide = req.session.requete_vide
+                            req.session.requete_vide = undefined
+                            res.render('./index', {Villes:Villes})
+                        } else {
+                            if (req.session.billets_list) {
+                                res.locals.billets_list=req.session.billets_list
+                                req.session.billets_list=undefined
+                                res.render("./index", {Villes:Villes})
+                            } else {
+                                res.render('./index', {Villes:Villes})
+                            }
+                        }
                     }
                 }
-            }
+            })
         }
     })
 })
@@ -49,7 +58,6 @@ router.post('/index', (req, res) => {
                 req.session.requete_vide = "Aucun trajet trouvé pour ces dates ou ces villes."
                 res.redirect('/index')
             } else {
-                console.log("lol")
                 req.session.billets_list = billets
                 res.redirect('/index')
             }
@@ -61,6 +69,7 @@ router.post('/index', (req, res) => {
 
 router.get('/index/billet/:id', (req, res) => {
     let getBilletbyId = require('../model/db').getBilletbyId
+    res.locals.currentclient = req.session.currentclient
     getBilletbyId(req.params.id, (billet, error) => {
         if (error) {
             res.locals.erreur = "SQL Error: SQL error: Not supposed to happend, please use the GUI."
@@ -166,6 +175,12 @@ router.post('/signup', (req, res) => {
             })
         })
     }
+})
+
+router.get('/disconnect', (req, res) => {
+    req.session.authorization = undefined
+    req.session.currentclient = undefined
+    res.redirect('/login')
 })
 
 module.exports = router

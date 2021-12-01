@@ -13,5 +13,8 @@
     <body>
         <div class="ui fixed inverted menu">
             <a href="/index" class="header item">Accueil</a>
+            <% if (locals.currentclient) {%>
+                <div class="header item right"><%= currentclient.Prenom%> <%= currentclient.Nom%>, <%= currentclient.Reduction%> <form action="/disconnect" method="GET"><button type="submit" class='button-disconnect'><i class="sign out alternate icon disconnect"></i></button></form></div>
+            <% } %>
         </div>
         <div class="ui main container centered">

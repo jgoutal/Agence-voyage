@@ -8,6 +8,7 @@ exports.authentification = (req, res, next) => {
         if (req.session.authorization.clientId !== clientId) {
             throw 'Invalid client ID'
         } else {
+            req.session.currentclient = clientId
             next()
         }
     } catch {
