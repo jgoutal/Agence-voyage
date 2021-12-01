@@ -2,7 +2,6 @@ let express = require('express')
 let app = express()
 let bodyParser = require('body-parser')
 let session = require('express-session')
-const Billet = require('./controllers/billet')
 let PORT = 8080
 
 //editeur de vues
@@ -18,10 +17,8 @@ app.use(session({
     cookie: { secure: false }
 }))
 
-app.use((req, res, next) => {
-    console.log(req.method)
-    next()
-})
+let authentification = require('./model/middleware').authentification
+app.use('/index', authentification)
 
 //import des routers
 let router = require('./controllers/router')

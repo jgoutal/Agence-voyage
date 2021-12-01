@@ -2,7 +2,7 @@ const { request } = require('express')
 const express = require('express')
 const router = express.Router()
 
-router.get('/', (req, res) => {
+router.get('/index', (req, res) => {
     let getVilles = require('../model/db').getVilles
     getVilles((Villes, error) => {
         if (error) {
@@ -33,24 +33,25 @@ router.get('/', (req, res) => {
     })
 })
 
-router.post('/', (req, res) => {
+router.post('/index', (req, res) => {
     let getBillet = require('../model/db').getBillet
     if (req.body.villeArrive === undefined || req.body.villeArrive === "" || req.body.villeDepart === undefined || req.body.villeDepart === "" || req.body.date === undefined || req.body.date === "") {
         req.session.erreur = "Merci de rentrer toutes les valeurs."
-        res.redirect('/')
+        res.redirect('/index')
     } else {
     getBillet(req.body.villeDepart, req.body.villeArrive, req.body.date, (billets, error) => {
         if (error) {
             console.log(error)
             req.session.erreur = "SQL error: Not supposed to happend, please use the GUI."
-            res.redirect('/')
+            res.redirect('/index')
         } else {
             if (billets.length === 0) {
                 req.session.requete_vide = "Aucun trajet trouvé pour ces dates ou ces villes."
-                res.redirect('/')
+                res.redirect('/index')
             } else {
+                console.log("lol")
                 req.session.billets_list = billets
-                res.redirect('/')
+                res.redirect('/index')
             }
         }
     })
@@ -58,12 +59,12 @@ router.post('/', (req, res) => {
     
 })
 
-router.get('/billet/:id', (req, res) => {
+router.get('/index/billet/:id', (req, res) => {
     let getBilletbyId = require('../model/db').getBilletbyId
     getBilletbyId(req.params.id, (billet, error) => {
         if (error) {
             res.locals.erreur = "SQL Error: SQL error: Not supposed to happend, please use the GUI."
-            res.redirect('/')
+            res.redirect('/index')
         }
         let pretty_date = require('../util/date_manipulation').pretty_date
         billet = billet[0]
@@ -137,7 +138,7 @@ router.post('/login', (req, res) => {
                             )
                         }
                         res.status(200)
-                        res.redirect("/")
+                        res.redirect("/index")
                     }
                 })
             }
