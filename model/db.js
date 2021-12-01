@@ -14,3 +14,10 @@ exports.getBilletbyId = (idBillet, cb) => {
         cb(res)
     })
 }
+
+exports.getVilles = (cb) => {
+    connection.query('SELECT * FROM Villes', (err, res, _field) => {
+        if (err) throw err
+        cb(res)
+    })
+}

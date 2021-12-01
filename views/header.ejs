@@ -4,10 +4,20 @@
 <form action="/" class="ui form" method="post" style="text-align: center;">
     <div class="three fields">
         <div class="field">
-            <input type="text" name="villeDepart" placeholder="Départ : Ville" style="height:41px">
+            <input list="browsers" type="text" name="villeDepart" placeholder="Départ : Ville" style="height:41px">
+            <datalist id="browsers">
+                <% for (ville of Villes) {%>
+                    <option value="<%=ville.Name%>"></option>
+                <% } %>
+            </datalist>
         </div>
         <div class="field">
-            <input type="text" name="villeArrive" placeholder="Arrivée : Ville" style="height:41px">
+            <input list="browsers" type="text" name="villeArrive" placeholder="Arrivée : Ville" style="height:41px">
+            <datalist id="browsers">
+                <% for (ville of Villes) {%>
+                    <option value="<%=ville.Name%>"></option>
+                <% } %>
+            </datalist>
         </div>
         <div class="field">
             <input type="date" name="date">

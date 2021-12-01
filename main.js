@@ -10,26 +10,34 @@ app.use('/assets', express.static('public'))
 app.use(bodyParser.urlencoded({extended:false}))
 
 app.get('/', (req, res) => {
-    res.render('./index')
+    let getVilles = require('./model/db').getVilles
+    getVilles((Villes) => {
+        res.render('./index', {Villes:Villes})
+    })
 })
 
 app.post('/', (req, res) => {
-    let getBillet = require('./model/billet-model').getBillet
+    let getBillet = require('./model/db').getBillet
+    let getVilles = require('./model/db').getVilles
     if (req.body.villeArrive === undefined || req.body.villeArrive === "" || req.body.villeDepart === undefined || req.body.villeDepart === "" || req.body.date === undefined || req.body.date === "") {
         res.render("./index", {erreur: "Merci de rentrer toutes les valeurs."})
     } else {
     getBillet(req.body.villeDepart, req.body.villeArrive, req.body.date, (billets) => {
         if (billets.length === 0) {
-            res.render("./index", {requete_vide: "Aucun trajet trouvé pour ces dates ou ces villes."})
+            getVilles((Villes) => {
+                res.render("./index", {requete_vide: "Aucun trajet trouvé pour ces dates ou ces villes.", Villes:Villes})
+            })
         } else {
-            res.render("./index", {billets_list:billets})
+            getVilles((Villes) => {
+                res.render("./index", {billets_list:billets, Villes:Villes})
+            })
         }
     })
     }
 })
 
 app.get('/billet/:id', (req, res) => {
-    let getBilletbyId = require('./model/billet-model').getBilletbyId
+    let getBilletbyId = require('./model/db').getBilletbyId
     getBilletbyId(req.params.id, (billet) => {
         let pretty_date = require('./util/date_manipulation').pretty_date
         billet = billet[0]
