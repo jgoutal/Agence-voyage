@@ -15,28 +15,28 @@ router.get('/index', (req, res) => {
                 if (error) {
                     console.log(error)
                     req.locals.erreur = "SQL Error: Not suppose to happend, please use the GUI."
-                    res.render('./index', {Villes:Villes})
                 } else {
                     if (req.session.erreur) {
                         res.locals.erreur = req.session.erreur
                         req.session.erreur = undefined
-                        res.render('./index', {Villes:Villes})
                     } else {
                         if (req.session.requete_vide) {
                             res.locals.requete_vide = req.session.requete_vide
                             req.session.requete_vide = undefined
-                            res.render('./index', {Villes:Villes})
                         } else {
-                            if (req.session.billets_list) {
-                                res.locals.billets_list=req.session.billets_list
-                                req.session.billets_list=undefined
-                                res.render("./index", {Villes:Villes})
+                            if (req.session.succes_reservation) {
+                                res.locals.succes_reservation = req.session.succes_reservation
+                                req.session.succes_reservation = undefined
                             } else {
-                                res.render('./index', {Villes:Villes})
+                                if (req.session.billets_list) {
+                                    res.locals.billets_list=req.session.billets_list
+                                    req.session.billets_list=undefined
+                                }
                             }
                         }
                     }
                 }
+                res.render('./index', {Villes:Villes})
             })
         }
     })
@@ -83,16 +83,21 @@ router.get('/index/billet/:id', (req, res) => {
                 }
                 let pretty_date = require('../util/date_manipulation').pretty_date
                 billet = billet[0]
+                if (req.session.error) {
+                    res.locals.error = req.session.error
+                    req.session.error = undefined
+                } 
                 res.render('./page_billet', {HeureDepart:billet.HeureDepart,
-                                             HeureArrivee:billet.HeureArrivee,
-                                             Prix:billet.Prix,
-                                             Train:billet.Train,
-                                             date:pretty_date(billet.DateDepart),
-                                             GareArrive:billet.GareDestination,
-                                             GareDepart:billet.GareDepart,
-                                             villeDepart:billet.VilleDepart,
-                                             villeArrive:billet.VilleDestination,
-                                             duree:billet.duree})
+                    HeureArrivee:billet.HeureArrivee,
+                    Prix:billet.Prix,
+                    Train:billet.Train,
+                    date:pretty_date(billet.DateDepart),
+                    GareArrive:billet.GareDestination,
+                    GareDepart:billet.GareDepart,
+                    villeDepart:billet.VilleDepart,
+                    villeArrive:billet.VilleDestination,
+                    duree:billet.duree,
+                    idBillet:req.params.id})
             })
         }
     })
@@ -188,6 +193,28 @@ router.get('/disconnect', (req, res) => {
     req.session.authorization = undefined
     req.session.currentclient = undefined
     res.redirect('/login')
+})
+
+router.post('/index/reservation', (req, res) => {
+    let findClientByLogin = require('../model/db').findClientByLogin
+    findClientByLogin(req.session.currentclient, (client, error) => {
+        if (error) {
+            console.log(error)
+            res.redirect('./login')
+        } else {
+            let makeReservation = require('../model/db').makeReservation
+            makeReservation(client[0].login, req.body.idBillet, req.body.numeroVoiture, req.body.numeroPlace, (result, error) => {
+                if (error) {
+                    console.log(error)
+                    req.session.error = "Place déjà prise."
+                    res.redirect('/index/billet/'+req.body.idBillet)
+                } else {
+                    req.session.succes_reservation = "Billet réservé."
+                    res.redirect('/index')
+                }
+            })
+        }
+    })
 })
 
 module.exports = router

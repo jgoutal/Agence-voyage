@@ -1,4 +1,9 @@
 <%- include('header-global')%>
+<% if (locals.error) {%>
+    <div class="ui message negative">
+        <%= error %>
+    </div>
+<% } %>
 <div class="ui segment">
     <h2 class="titre"><%=date%></h2>
     <div class="page-billet-container">
@@ -9,6 +14,7 @@
             <div class="prix"><p><b>Prix: </b> <span class="prix-definitif"><%=Math.floor(Prix*(100-currentclient.Taux)/100)%>€</span> (<del class="prix-base"><%=Prix%>€</del> <span class="reduction"><%=currentclient.Taux%>%)</span></p></div>
         </div>
         <form id="select-place-form" action="/index/reservation" class="ui form place-select" method="POST">
+            <input type="hidden" name="idBillet" value='<%=idBillet%>'>
             <label for="numeroVoiture">Numéro de la voiture</label>
             <select name="numeroVoiture" id="numeroVoiture" class="ui fluid dropdown">
                 <option value="1">1</option>

@@ -52,12 +52,20 @@ exports.findClientByLogin = (login, cb) => {
     })
 }
 
+exports.makeReservation = (clientId, idBillet, numVoiture, numPlace, cb) => {
+    let query = 'INSERT INTO Reservation (Client, Billet, NumeroVoiture, NumeroPlace) '
+    query += 'VALUES (?, ?, ?, ?)'
+    connection.query(query, [clientId, idBillet, numVoiture, numPlace], (err, res, _field) => {
+        cb(res, err)
+    })
+}
+
 exports.findNumerosVoitureFromBillet = (idBillet, cb) => {
     let query =  'SELECT Numero '
     query +=     'FROM Billet, Voiture '
     query +=     'WHERE Billet.Train = Voiture.Train '
     query +=     'AND Billet.idBillet=?'
-    connection.query(query, [idBillet], (res, err) => {
+    connection.query(query, [idBillet], (err, res) => {
         cb(res, err)
     })
 }

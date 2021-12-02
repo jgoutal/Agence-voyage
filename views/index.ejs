@@ -10,6 +10,11 @@
         <%= requete_vide %>
     </div>
 <% } %>
+<% if (locals.succes_reservation) {%>
+    <div class="message ui positive">
+        <%= succes_reservation %>
+    </div>
+<% } %>
 <% if (locals.billets_list) {%>
     <div class="ui segment">
         <div class="ui relaxed divided list">
