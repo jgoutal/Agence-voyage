@@ -86,7 +86,7 @@ exports.findReservationsByLogin = (clientId, cb) => {
 }
 
 exports.getNumerosVoiture = (idBillet, cb) => {
-    let query = 'SELECT Numero '
+    let query = 'SELECT V.Numero '
     query +=    'FROM Billet B, Voiture V '
     query +=    'WHERE B.Train = V.Train '
     query +=    'AND B.idBillet=?'

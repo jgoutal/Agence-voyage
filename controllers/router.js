@@ -14,10 +14,10 @@ router.get('/index', (req, res) => {
             getVilles((Villes, error) => {
                 if (error) {
                     console.log(error)
-                    req.locals.erreur = "SQL Error: Not suppose to happend, please use the GUI."
+                    res.locals.error = "SQL Error: Not suppose to happend, please use the GUI."
                 } else {
                     if (req.session.error) {
-                        res.locals.erreur = req.session.error
+                        res.locals.error = req.session.error
                         req.session.error = undefined
                     } else {
                         if (req.session.requete_vide) {
@@ -78,7 +78,7 @@ router.get('/index/billet/:id', (req, res) => {
             res.locals.currentclient = client[0]
             getBilletbyId(req.params.id, (billet, error) => {
                 if (error) {
-                    res.locals.erreur = "SQL Error: SQL error: Not supposed to happend, please use the GUI."
+                    res.locals.error = "SQL Error: SQL error: Not supposed to happend, please use the GUI."
                     res.redirect('/index')
                 }
                 let pretty_date = require('../util/date_manipulation').pretty_date
@@ -87,17 +87,27 @@ router.get('/index/billet/:id', (req, res) => {
                     res.locals.error = req.session.error
                     req.session.error = undefined
                 } 
-                res.render('./page_billet', {HeureDepart:billet.HeureDepart,
-                    HeureArrivee:billet.HeureArrivee,
-                    Prix:billet.Prix,
-                    Train:billet.Train,
-                    date:pretty_date(billet.DateDepart),
-                    GareArrive:billet.GareDestination,
-                    GareDepart:billet.GareDepart,
-                    villeDepart:billet.VilleDepart,
-                    villeArrive:billet.VilleDestination,
-                    duree:billet.Duree,
-                    idBillet:req.params.id})
+                let getNumerosVoiture = require('../model/db').getNumerosVoiture
+                getNumerosVoiture(req.params.id, (numerosVoiture, error) => {
+                    if (error) {
+                        console.log(error)
+                        res.locals.error = error
+                        res.redirect('/index')
+                    } else {
+                        res.locals.numerosVoiture = numerosVoiture
+                        res.render('./page_billet', {HeureDepart:billet.HeureDepart,
+                            HeureArrivee:billet.HeureArrivee,
+                            Prix:billet.Prix,
+                            Train:billet.Train,
+                            date:pretty_date(billet.DateDepart),
+                            GareArrive:billet.GareDestination,
+                            GareDepart:billet.GareDepart,
+                            villeDepart:billet.VilleDepart,
+                            villeArrive:billet.VilleDestination,
+                            duree:billet.Duree,
+                            idBillet:req.params.id})
+                    }
+                })
             })
         }
     })

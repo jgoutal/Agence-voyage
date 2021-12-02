@@ -17,11 +17,11 @@
             <input type="hidden" name="idBillet" value='<%=idBillet%>'>
             <label for="numeroVoiture">Numéro de la voiture</label>
             <select name="numeroVoiture" id="numeroVoiture" class="ui fluid dropdown">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
+                <% if (locals.numerosVoiture) {%>
+                    <% for (numero of numerosVoiture) {%>
+                        <option value="<%=numero.Numero%>"><%=numero.Numero%></option>
+                    <% }%>
+                <% }%>
             </select>
             <label for="numeroPlace">Numéro de la place</label>
             <select name="numeroPlace" id="numeroPlace" class="ui fluid dropdown">
