@@ -60,3 +60,15 @@
 .button-disconnect{
     margin-left: 1em;
 }
+
+.page-billet-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.place-select{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    right: 3em;
+}
