@@ -1,0 +1,23 @@
+<%- include('header-global') %>
+
+<div class="ui segment">
+    <div class="ui divided relaxed list">
+        <% for (res of reservations) {%>
+            <div class="item">
+                <h3 class="titre"><%=pretty_date(res.DateDepart)%></h3>
+                <div>
+                    <div class="info-generale"> Train n°: <span class="n-train"><%=res.Train%></span> Durée: <span class="duree"><%=res.Duree%></span></div>
+                    <div class="gare"><p><b><%=res.HeureDepart%></b> <i class="long arrow alternate right icon"></i> <%=res.VilleDepart%> <%=res.GareDepart%></p></div>
+                    <div class="gare"><p><b><%=res.HeureArrivee%></b> <i class="long arrow alternate right icon"></i> <%=res.VilleArrive%> <%=res.GareDestination%></p></div>
+                    <div class="prix"><p><b>Prix: </b> <span class="prix-definitif"><%=Math.floor(res.Prix*(100-currentclient.Taux)/100)%>€</span> (<del class="prix-base"><%=res.Prix%>€</del> <span class="reduction"><%=currentclient.Taux%>%)</span></p></div>
+                </div>
+                <div class="ui place-select">
+                    <label for="">Voiture: <%= res.NumeroVoiture%></label>
+                    <label for="">Place: <%= res.NumeroPlace%></label>
+                </div>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<%- include('footer') %> 

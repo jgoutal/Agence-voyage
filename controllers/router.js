@@ -16,9 +16,9 @@ router.get('/index', (req, res) => {
                     console.log(error)
                     req.locals.erreur = "SQL Error: Not suppose to happend, please use the GUI."
                 } else {
-                    if (req.session.erreur) {
-                        res.locals.erreur = req.session.erreur
-                        req.session.erreur = undefined
+                    if (req.session.error) {
+                        res.locals.erreur = req.session.error
+                        req.session.error = undefined
                     } else {
                         if (req.session.requete_vide) {
                             res.locals.requete_vide = req.session.requete_vide
@@ -45,13 +45,13 @@ router.get('/index', (req, res) => {
 router.post('/index', (req, res) => {
     let getBillet = require('../model/db').getBillet
     if (req.body.villeArrive === undefined || req.body.villeArrive === "" || req.body.villeDepart === undefined || req.body.villeDepart === "" || req.body.date === undefined || req.body.date === "") {
-        req.session.erreur = "Merci de rentrer toutes les valeurs."
+        req.session.error = "Merci de rentrer toutes les valeurs."
         res.redirect('/index')
     } else {
     getBillet(req.body.villeDepart, req.body.villeArrive, req.body.date, (billets, error) => {
         if (error) {
             console.log(error)
-            req.session.erreur = "SQL error: Not supposed to happend, please use the GUI."
+            req.session.error = "SQL error: Not supposed to happend, please use the GUI."
             res.redirect('/index')
         } else {
             if (billets.length === 0) {
@@ -96,7 +96,7 @@ router.get('/index/billet/:id', (req, res) => {
                     GareDepart:billet.GareDepart,
                     villeDepart:billet.VilleDepart,
                     villeArrive:billet.VilleDestination,
-                    duree:billet.duree,
+                    duree:billet.Duree,
                     idBillet:req.params.id})
             })
         }
@@ -211,6 +211,31 @@ router.post('/index/reservation', (req, res) => {
                 } else {
                     req.session.succes_reservation = "Billet réservé."
                     res.redirect('/index')
+                }
+            })
+        }
+    })
+})
+
+router.get('/index/mesreservations', (req, res) => {
+    let findClientByLogin = require('../model/db').findClientByLogin
+    findClientByLogin(req.session.currentclient, (client, error) => {
+        if (error) {
+            console.log(error)
+            res.redirect('/login')
+        } else {
+            res.locals.currentclient = client[0]
+            let findReservationsByLogin = require('../model/db').findReservationsByLogin
+            findReservationsByLogin(client[0].login, (reservations, error) => {
+                if (error) {
+                    console.log(error)
+                    req.session.error = 'SQL Error: Not supposed to happend, please use the GUI.'
+                    res.redirect('/index')
+                } else {
+                    let pretty_date = require('../util/date_manipulation').pretty_date
+                    res.locals.reservations = reservations
+                    res.locals.pretty_date = pretty_date
+                    res.render('./mes-reservations')
                 }
             })
         }

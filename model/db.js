@@ -69,3 +69,18 @@ exports.findNumerosVoitureFromBillet = (idBillet, cb) => {
         cb(res, err)
     })
 }
+
+exports.findReservationsByLogin = (clientId, cb) => {
+    let query = 'SELECT R.NumeroVoiture, R.NumeroPlace, B.HeureDepart, B.HeureArrivee, B.Prix, B.Train, B.VilleDestination, '
+    query +=    'B.VilleDepart, G1.Name GareDepart, G2.Name GareDestination, '
+    query +=    'DATE(B.DateDepart) DateDepart, '
+    query +=    'TIMEDIFF(TIMESTAMP(B.DateArrivee,B.HeureArrivee),TIMESTAMP(B.DateDepart,B.HeureDepart)) Duree '
+    query +=    'FROM Billet B, Gares G1, Gares G2, Reservation R '
+    query +=    'WHERE B.idBillet=R.Billet '
+    query +=    'AND G1.id = B.GareDepart AND G2.id = B.GareArrivee '
+    query +=    'AND R.Client=? '
+    query +=    'ORDER BY B.DateDepart, B.HeureDepart'
+    connection.query(query, [clientId], (err, res) => {
+        cb(res, err)
+    })
+}
