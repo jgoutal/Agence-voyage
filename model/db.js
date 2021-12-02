@@ -89,19 +89,24 @@ exports.getNumerosVoiture = (idBillet, cb) => {
     let query = 'SELECT V.Numero '
     query +=    'FROM Billet B, Voiture V '
     query +=    'WHERE B.Train = V.Train '
-    query +=    'AND B.idBillet=?'
+    query +=    'AND B.idBillet=? '
+    query +=    'ORDER BY V.Numero'
     connection.query(query, [idBillet], (err, res) => {
         cb(res, err)
     })
 }
 
-exports.getNumerosPlace = (idBillet, numPlace, cb) => {
+exports.getNumerosPlace = (idBillet, numVoiture, cb) => {
     let query = 'SELECT P.Numero '
     query +=    'FROM Place P, Voiture V, Billet B '
     query +=    'WHERE P.Voiture = V.idVoiture '
     query +=    'AND V.Train = B.Train '
-    query +=    'AND B.idBillet=? AND V.Numero=?'
-    connection.query(query, [idBillet, numPlace], (err, res) => {
-        cb(err, res)
+    query +=    'AND B.idBillet=? AND V.Numero=? '
+    query +=    'AND (B.idBillet, V.Numero, P.Numero) '
+    query +=    'NOT IN (SELECT Billet, NumeroVoiture, NumeroPlace '
+    query +=    '        FROM Reservation) '
+    query +=    'ORDER BY P.Numero'
+    connection.query(query, [idBillet, numVoiture], (err, res) => {
+        cb(res, err)
     })
 }

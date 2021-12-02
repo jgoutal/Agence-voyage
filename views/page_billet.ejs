@@ -14,22 +14,19 @@
             <div class="prix"><p><b>Prix: </b> <span class="prix-definitif"><%=Math.floor(Prix*(100-currentclient.Taux)/100)%>€</span> (<del class="prix-base"><%=Prix%>€</del> <span class="reduction"><%=currentclient.Taux%>%)</span></p></div>
         </div>
         <form id="select-place-form" action="/index/reservation" class="ui form place-select" method="POST">
-            <input type="hidden" name="idBillet" value='<%=idBillet%>'>
+            <input id ="hidden-input" type="hidden" name="idBillet" value='<%=idBillet%>'>
             <label for="numeroVoiture">Numéro de la voiture</label>
-            <select name="numeroVoiture" id="numeroVoiture" class="ui fluid dropdown">
+            <script type="text/javascript" src="/assets/SemanticUI/script.js"></script>
+            <select name="numeroVoiture" id="numeroVoiture" class="ui fluid dropdown" onchange="updateNumeroPlace(this.value)">
+                <option value="">Selectionner une voiture</option>
                 <% if (locals.numerosVoiture) {%>
                     <% for (numero of numerosVoiture) {%>
                         <option value="<%=numero.Numero%>"><%=numero.Numero%></option>
                     <% }%>
                 <% }%>
             </select>
-            <label for="numeroPlace">Numéro de la place</label>
-            <select name="numeroPlace" id="numeroPlace" class="ui fluid dropdown">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
+            <label>Numéro de la place</label>
+            <select name="numeroPlace" id="option" class="ui fluid dropdown">
             </select>
         </form>
     </div>

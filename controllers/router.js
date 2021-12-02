@@ -252,4 +252,24 @@ router.get('/index/mesreservations', (req, res) => {
     })
 })
 
+router.get('/index/getplace', (req, res) => {
+    let findClientByLogin = require('../model/db').findClientByLogin
+    findClientByLogin(req.session.currentclient, (client, error) => {
+        if (error) {
+            console.log(error)
+            res.redirect('/index')
+        } else {
+            let getNumerosPlace = require('../model/db').getNumerosPlace
+            getNumerosPlace(req.query.idBillet, req.query.num, (numPlace, err) => {
+                if (err) {
+                    console.log(err)
+                    res.redirect('/index')
+                } else {
+                    res.send(numPlace)
+                }
+            })
+        }
+    })
+})
+
 module.exports = router
