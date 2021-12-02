@@ -24,6 +24,10 @@ app.use('/index', authentification)
 let router = require('./controllers/router')
 app.use('/', router)
 
+app.use('/', (req, res, next) => {
+    res.redirect('/index')
+})
+
 //on ecoute les requetes sur PORT
 app.listen(PORT, () => {
     console.log(`Connected to ${PORT} `)
