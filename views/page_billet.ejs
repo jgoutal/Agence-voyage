@@ -16,7 +16,7 @@
         <form id="select-place-form" action="/index/reservation" class="ui form place-select" method="POST">
             <input id ="hidden-input" type="hidden" name="idBillet" value='<%=idBillet%>'>
             <label for="numeroVoiture">Numéro de la voiture</label>
-            <script type="text/javascript" src="/assets/SemanticUI/script.js"></script>
+            <script type="text/javascript" src="/assets/static/my-script.js"></script>
             <select name="numeroVoiture" id="numeroVoiture" class="ui fluid dropdown" onchange="updateNumeroPlace(this.value)">
                 <option value="">Selectionner une voiture</option>
                 <% if (locals.numerosVoiture) {%>
