@@ -1,13 +1,29 @@
 let connection = require("../config/db-config")
 
 exports.getBillet = (VilleDepart, VilleDestination, date, cb) => {
-    connection.query('SELECT B.idBillet, B.HeureDepart, B.HeureArrivee, B.Prix, B.Train, B.VilleDestination, B.VilleDepart, G1.Name GareDepart, G2.Name GareDestination, TIMEDIFF(TIMESTAMP(B.DateArrivee,B.HeureArrivee),TIMESTAMP(B.DateDepart,B.HeureDepart)) Duree FROM Billet B, Gares G1, Gares G2 WHERE VilleDepart=? AND VilleDestination=? AND DateDepart=? AND G1.id = B.GareDepart AND G2.id = B.GareArrivee', [VilleDepart, VilleDestination, date], (err, res, _field) => {
+    let query = 'SELECT B.idBillet, B.HeureDepart, B.HeureArrivee, B.Prix, B.Train, B.VilleDestination, '
+    query +=    'B.VilleDepart, G1.Name GareDepart, G2.Name GareDestination, '
+    query +=    'TIMEDIFF(TIMESTAMP(B.DateArrivee,B.HeureArrivee),TIMESTAMP(B.DateDepart,B.HeureDepart)) Duree '
+    query +=    'FROM Billet B, Gares G1, Gares G2 '
+    query +=    'WHERE VilleDepart=? '
+    query +=    'AND VilleDestination=? '
+    query +=    'AND DateDepart=? '
+    query +=    'AND G1.id = B.GareDepart '
+    query +=    'AND G2.id = B.GareArrivee'
+    connection.query(query, [VilleDepart, VilleDestination, date], (err, res, _field) => {
         cb(res, err)
     })
 }
 
 exports.getBilletbyId = (idBillet, cb) => {
-    connection.query('SELECT B.HeureDepart, B.HeureArrivee, B.Prix, B.Train, B.VilleDestination, B.VilleDepart, G1.Name GareDepart, G2.Name GareDestination, DATE(B.DateDepart) DateDepart, TIMEDIFF(TIMESTAMP(B.DateArrivee,B.HeureArrivee),TIMESTAMP(B.DateDepart,B.HeureDepart)) Duree FROM Billet B, Gares G1, Gares G2 WHERE idBillet=? AND G1.id = B.GareDepart AND G2.id = B.GareArrivee', [idBillet], (err, res, _field) => {
+    let query = 'SELECT B.HeureDepart, B.HeureArrivee, B.Prix, B.Train, B.VilleDestination, '
+    query +=    'B.VilleDepart, G1.Name GareDepart, G2.Name GareDestination, '
+    query +=    'DATE(B.DateDepart) DateDepart, '
+    query +=    'TIMEDIFF(TIMESTAMP(B.DateArrivee,B.HeureArrivee),TIMESTAMP(B.DateDepart,B.HeureDepart)) Duree '
+    query +=    'FROM Billet B, Gares G1, Gares G2 '
+    query +=    'WHERE idBillet=? '
+    query +=    'AND G1.id = B.GareDepart AND G2.id = B.GareArrivee'
+    connection.query(query, [idBillet], (err, res, _field) => {
         cb(res, err)
     })
 }
@@ -20,14 +36,28 @@ exports.getVilles = (cb) => {
 }
 
 exports.createClient = (prenom, nom, type, reduction, login, password, cb) => {
-    connection.query('INSERT INTO Clients (Prenom, Nom, Type, Reduction, login, password) VALUES (?, ?, ?, ?, ?, ?);',
-    [prenom, nom, type, reduction, login, password], (err, res, _field) => {
+    let query = 'INSERT INTO Clients (Prenom, Nom, Type, Reduction, login, password) '
+    query +=    'VALUES (?, ?, ?, ?, ?, ?)'
+    connection.query(query, [prenom, nom, type, reduction, login, password], (err, res, _field) => {
         cb(res, err)
     })
 }
 
 exports.findClientByLogin = (login, cb) => {
-    connection.query('SELECT Prenom, Nom, Type, Reduction, Taux, login, password  FROM Clients, Reduction WHERE login=? AND Reduction.idReduction = Clients.Reduction', [login], (err, res, _field) => {
+    let query = 'SELECT Prenom, Nom, Type, Reduction, Taux, login, password '
+    query +=    'FROM Clients, Reduction '
+    query +=    'WHERE login=? AND Reduction.idReduction = Clients.Reduction'
+    connection.query(query, [login], (err, res, _field) => {
+        cb(res, err)
+    })
+}
+
+exports.findNumerosVoitureFromBillet = (idBillet, cb) => {
+    let query =  'SELECT Numero '
+    query +=     'FROM Billet, Voiture '
+    query +=     'WHERE Billet.Train = Voiture.Train '
+    query +=     'AND Billet.idBillet=?'
+    connection.query(query, [idBillet], (res, err) => {
         cb(res, err)
     })
 }
