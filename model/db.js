@@ -84,3 +84,24 @@ exports.findReservationsByLogin = (clientId, cb) => {
         cb(res, err)
     })
 }
+
+exports.getNumerosVoiture = (idBillet, cb) => {
+    let query = 'SELECT Numero '
+    query +=    'FROM Billet B, Voiture V '
+    query +=    'WHERE B.Train = V.Train '
+    query +=    'AND B.idBillet=?'
+    connection.query(query, [idBillet], (err, res) => {
+        cb(res, err)
+    })
+}
+
+exports.getNumerosPlace = (idBillet, numPlace, cb) => {
+    let query = 'SELECT P.Numero '
+    query +=    'FROM Place P, Voiture V, Billet B '
+    query +=    'WHERE P.Voiture = V.idVoiture '
+    query +=    'AND V.Train = B.Train '
+    query +=    'AND B.idBillet=? AND V.Numero=?'
+    connection.query(query, [idBillet, numPlace], (err, res) => {
+        cb(err, res)
+    })
+}
