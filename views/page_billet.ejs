@@ -8,7 +8,7 @@
             <div class="gare"><p><b><%=HeureArrivee%></b> <i class="long arrow alternate right icon"></i> <%=villeArrive%> <%=GareArrive%></p></div>
             <div class="prix"><p><b>Prix: </b> <span class="prix-definitif"><%=Math.floor(Prix*(100-currentclient.Taux)/100)%>€</span> (<del class="prix-base"><%=Prix%>€</del> <span class="reduction"><%=currentclient.Taux%>%)</span></p></div>
         </div>
-        <form action="" class="ui form place-select" method="POST">
+        <form id="select-place-form" action="/index/reservation" class="ui form place-select" method="POST">
             <label for="numeroVoiture">Numéro de la voiture</label>
             <select name="numeroVoiture" id="numeroVoiture" class="ui fluid dropdown">
                 <option value="1">1</option>
@@ -27,6 +27,6 @@
             </select>
         </form>
     </div>
-    <div class="button-container"><a class="ui button red">Accepter</a><a class="ui button basic" href="/index">Refuser</a></div>
+    <div class="button-container"><button form="select-place-form" class="ui button red">Accepter</button><a class="ui button basic" href="/index">Refuser</a></div>
 </div>
 <%- include('footer')%>
