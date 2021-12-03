@@ -1,0 +1,30 @@
+{
+  "name": "agence-sncf",
+  "version": "1.0.0",
+  "description": "Web-app réservation de billet",
+  "main": "./main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "nodemon ./main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jgoutal/Agence-SNCF.git"
+  },
+  "author": "GOUT Numa, GOUTAl Joad",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jgoutal/Agence-SNCF/issues"
+  },
+  "homepage": "https://github.com/jgoutal/Agence-SNCF#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "jsonwebtoken": "^8.5.1",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.15"
+  }
+}

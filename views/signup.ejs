@@ -1,0 +1,53 @@
+<%- include('header-global')%>
+
+<% if (locals.error) {%>
+  <div class="ui negative message">
+      <%= error %>
+  </div>
+<% } %>
+
+<form action="/signup" class="ui form" method="POST">
+    <div class="field">
+      <label>Nom</label>
+      <div class="two fields">
+        <div class="field">
+          <input type="text" name="prenom" placeholder="Prénom">
+        </div>
+        <div class="field">
+          <input type="text" name="nom" placeholder="Nom">
+        </div>
+      </div>
+    </div>
+    <div class="two fields">
+        <div class="field">
+            <label>Age</label>
+            <select name="type" class="ui fluid dropdown">
+                <option value="Adulte">Adulte</option>
+                <option value="Enfant">Enfant</option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Reduction</label>
+            <select name="reduction" class="ui fluid dropdown">
+                <option value="Aucune">Aucune</option>
+                <option value="Decouverte">Découverte</option>
+                <option value="Jeune">Jeune</option>
+                <option value="Militaire">Militaire</option>
+                <option value="Senior">Sénior</option>     
+            </select>
+        </div>
+    </div>   
+    <div class="field">
+        <label>Login/Mot de Passe</label>
+        <div class="two fields">
+          <div class="field">
+            <input type="text" name="login" placeholder="Login">
+          </div>
+          <div class="field">
+            <input type="password" name="password" placeholder="Mot de passe">
+          </div>
+        </div>
+    </div>
+    <div><button class="ui button green" type="submit">S'inscrire</button><a href="/login" class="ui button red">J'ai déjà un compte</a></div>
+</form>      
+<%- include('footer') %> 
