@@ -9,7 +9,7 @@ exports.getBillet = (VilleDepart, VilleDestination, date, cb) => {
     query +=    'AND VilleDestination=? '
     query +=    'AND DateDepart=? '
     query +=    'AND G1.id = B.GareDepart '
-    query +=    'AND G2.id = B.GareArrivee'
+    query +=    'AND G2.id = B.GareArrivee '
     query +=    'ORDER BY B.HeureDepart'
     connection.query(query, [VilleDepart, VilleDestination, date], (err, res, _field) => {
         cb(res, err)
