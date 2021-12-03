@@ -3,6 +3,12 @@ const express = require('express')
 const router = express.Router()
 
 router.get('/index', (req, res) => {
+    /*
+    Renvoie la page de garde.
+    -Si le client n'est pas connecté, redirige vers la page login
+    -S'il y a des erreurs elle les affiche
+    -Sinon renvoie la liste des billets (ou rien)
+    */ 
     let getVilles = require('../model/db').getVilles
     let findClientByLogin = require('../model/db').findClientByLogin
     findClientByLogin(req.session.currentclient, (client, error) => {
@@ -43,6 +49,9 @@ router.get('/index', (req, res) => {
 })
 
 router.post('/index', (req, res) => {
+    /*
+        Requete post redirige vers la page de base avec la liste des billets en variables
+    */
     let getBillet = require('../model/db').getBillet
     if (req.body.villeArrive === undefined || req.body.villeArrive === "" || req.body.villeDepart === undefined || req.body.villeDepart === "" || req.body.date === undefined || req.body.date === "") {
         req.session.error = "Merci de rentrer toutes les valeurs."
@@ -68,6 +77,7 @@ router.post('/index', (req, res) => {
 })
 
 router.get('/index/billet/:id', (req, res) => {
+    // Retourne la page du billet, page qui permet de valider la reservation
     let getBilletbyId = require('../model/db').getBilletbyId
     let findClientByLogin = require('../model/db').findClientByLogin
     findClientByLogin(req.session.currentclient, (client, error) => {
@@ -114,6 +124,7 @@ router.get('/index/billet/:id', (req, res) => {
 })
 
 router.get('/signup', (req, res) => {
+    // Retourne la page d'inscription
     if (req.session.error) {
         res.locals.error = req.session.error
         req.session.error = undefined
@@ -124,6 +135,7 @@ router.get('/signup', (req, res) => {
 })
 
 router.get('/login', (req, res) => {
+    // retourne la page d'indentification
     if (req.session.error) {
         res.locals.error = req.session.error
         req.session.error = undefined
@@ -140,6 +152,7 @@ router.get('/login', (req, res) => {
 })
 
 router.post('/login', (req, res) => {
+    // Methode POST de tentative de connection
     let bcrypt = require('bcrypt')
     let findClientByLogin = require('../model/db').findClientByLogin
     findClientByLogin(req.body.login, (result, error) => {
@@ -178,6 +191,7 @@ router.post('/login', (req, res) => {
 })
 
 router.post('/signup', (req, res) => {
+    // Methode POST de tentative d'inscription
     let bcrypt = require('bcrypt')
     if (req.body.prenom === undefined || req.body.prenom === "" || req.body.nom === undefined || req.body.nom === "" || req.body.login === undefined || req.body.login === "" || req.body.password === undefined || req.body.password === "") {
         req.session.error = "Merci de rentrer tous les champs."
@@ -200,12 +214,14 @@ router.post('/signup', (req, res) => {
 })
 
 router.get('/disconnect', (req, res) => {
+    // Supprime toutes les variables de session permettant d'indentifier le client
     req.session.authorization = undefined
     req.session.currentclient = undefined
     res.redirect('/login')
 })
 
 router.post('/index/reservation', (req, res) => {
+    // Methode POST, valide la reservation
     let findClientByLogin = require('../model/db').findClientByLogin
     findClientByLogin(req.session.currentclient, (client, error) => {
         if (error) {
@@ -228,6 +244,7 @@ router.post('/index/reservation', (req, res) => {
 })
 
 router.get('/index/mesreservations', (req, res) => {
+    // Retourne la page contenant toutes les reservations d'un client
     let findClientByLogin = require('../model/db').findClientByLogin
     findClientByLogin(req.session.currentclient, (client, error) => {
         if (error) {
@@ -253,6 +270,7 @@ router.get('/index/mesreservations', (req, res) => {
 })
 
 router.get('/index/getplace', (req, res) => {
+    // Retourne un texte avec toutes les places disponibles pour une voiture donnée, sert à une reponse AJAX
     let findClientByLogin = require('../model/db').findClientByLogin
     findClientByLogin(req.session.currentclient, (client, error) => {
         if (error) {

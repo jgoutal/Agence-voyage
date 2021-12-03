@@ -17,6 +17,7 @@ app.use(session({
     cookie: { secure: false }
 }))
 
+//middleware de redirection si non connecte
 let authentification = require('./model/middleware').authentification
 app.use('/index', authentification)
 
@@ -24,6 +25,7 @@ app.use('/index', authentification)
 let router = require('./controllers/router')
 app.use('/', router)
 
+//middleware redirige les requetes vers la racine
 app.use('/', (req, res, next) => {
     res.redirect('/index')
 })

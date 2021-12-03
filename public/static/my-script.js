@@ -1,4 +1,5 @@
 function updateNumeroPlace(nb) {
+    // Effectue une requete AJAX pour changer seulement la liste des places disponibles
     if (nb === "" ) {
         document.getElementById("option").innerHTML = ""
         return

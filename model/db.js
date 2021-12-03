@@ -1,6 +1,7 @@
 let connection = require("../config/db-config")
 
 exports.getBillet = (VilleDepart, VilleDestination, date, cb) => {
+    // Requete a la bdd, renvoie tous les billets entre deux villes a une date precise
     let query = 'SELECT B.idBillet, B.HeureDepart, B.HeureArrivee, B.Prix, B.Train, B.VilleDestination, '
     query +=    'B.VilleDepart, G1.Name GareDepart, G2.Name GareDestination, '
     query +=    'TIMEDIFF(TIMESTAMP(B.DateArrivee,B.HeureArrivee),TIMESTAMP(B.DateDepart,B.HeureDepart)) Duree '
@@ -17,6 +18,7 @@ exports.getBillet = (VilleDepart, VilleDestination, date, cb) => {
 }
 
 exports.getBilletbyId = (idBillet, cb) => {
+    // Renvoie le billet d'id = idBillet
     let query = 'SELECT B.HeureDepart, B.HeureArrivee, B.Prix, B.Train, B.VilleDestination, '
     query +=    'B.VilleDepart, G1.Name GareDepart, G2.Name GareDestination, '
     query +=    'DATE(B.DateDepart) DateDepart, '
@@ -30,6 +32,7 @@ exports.getBilletbyId = (idBillet, cb) => {
 }
 
 exports.getVilles = (cb) => {
+    // Renvoie toutes les villes dans la base de donnee
     connection.query('SELECT * FROM Villes ORDER BY Name', (err, res, _field) => {
         cb(res, err)
     })
@@ -37,6 +40,7 @@ exports.getVilles = (cb) => {
 }
 
 exports.createClient = (prenom, nom, type, reduction, login, password, cb) => {
+    // Creer un client dans la base de donnee, le login est unique et le password est chiffré
     let query = 'INSERT INTO Clients (Prenom, Nom, Type, Reduction, login, password) '
     query +=    'VALUES (?, ?, ?, ?, ?, ?)'
     connection.query(query, [prenom, nom, type, reduction, login, password], (err, res, _field) => {
@@ -45,6 +49,7 @@ exports.createClient = (prenom, nom, type, reduction, login, password, cb) => {
 }
 
 exports.findClientByLogin = (login, cb) => {
+    // Renvoie un client identifié par son login
     let query = 'SELECT Prenom, Nom, Type, Reduction, Taux, login, password '
     query +=    'FROM Clients, Reduction '
     query +=    'WHERE login=? AND Reduction.idReduction = Clients.Reduction'
@@ -54,6 +59,7 @@ exports.findClientByLogin = (login, cb) => {
 }
 
 exports.makeReservation = (clientId, idBillet, numVoiture, numPlace, cb) => {
+    // Entre une reservation dans la bdd
     let query = 'INSERT INTO Reservation (Client, Billet, NumeroVoiture, NumeroPlace) '
     query += 'VALUES (?, ?, ?, ?)'
     connection.query(query, [clientId, idBillet, numVoiture, numPlace], (err, res, _field) => {
@@ -61,17 +67,8 @@ exports.makeReservation = (clientId, idBillet, numVoiture, numPlace, cb) => {
     })
 }
 
-exports.findNumerosVoitureFromBillet = (idBillet, cb) => {
-    let query =  'SELECT Numero '
-    query +=     'FROM Billet, Voiture '
-    query +=     'WHERE Billet.Train = Voiture.Train '
-    query +=     'AND Billet.idBillet=?'
-    connection.query(query, [idBillet], (err, res) => {
-        cb(res, err)
-    })
-}
-
 exports.findReservationsByLogin = (clientId, cb) => {
+    // 
     let query = 'SELECT R.NumeroVoiture, R.NumeroPlace, B.HeureDepart, B.HeureArrivee, B.Prix, B.Train, B.VilleDestination, '
     query +=    'B.VilleDepart, G1.Name GareDepart, G2.Name GareDestination, '
     query +=    'DATE(B.DateDepart) DateDepart, '
@@ -87,6 +84,7 @@ exports.findReservationsByLogin = (clientId, cb) => {
 }
 
 exports.getNumerosVoiture = (idBillet, cb) => {
+    // Renvoie les numeros des voitures du train associé à un billet
     let query = 'SELECT V.Numero '
     query +=    'FROM Billet B, Voiture V '
     query +=    'WHERE B.Train = V.Train '
@@ -98,6 +96,7 @@ exports.getNumerosVoiture = (idBillet, cb) => {
 }
 
 exports.getNumerosPlace = (idBillet, numVoiture, cb) => {
+    // Renvoie les numeros des places disponibles associé à une voiture donnée
     let query = 'SELECT P.Numero '
     query +=    'FROM Place P, Voiture V, Billet B '
     query +=    'WHERE P.Voiture = V.idVoiture '
