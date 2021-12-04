@@ -259,9 +259,13 @@ router.get('/index/mesreservations', (req, res) => {
                     req.session.error = 'SQL Error: Not supposed to happend, please use the GUI.'
                     res.redirect('/index')
                 } else {
-                    let pretty_date = require('../util/date_manipulation').pretty_date
-                    res.locals.reservations = reservations
-                    res.locals.pretty_date = pretty_date
+                    if (reservations.length === 0) {
+                        res.locals.no_reservation = "Vous n'avez aucune réservation."
+                    } else {
+                        let pretty_date = require('../util/date_manipulation').pretty_date
+                        res.locals.reservations = reservations
+                        res.locals.pretty_date = pretty_date
+                    }
                     res.render('./mes-reservations')
                 }
             })
