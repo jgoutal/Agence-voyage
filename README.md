@@ -1,4 +1,4 @@
-# Agence-SNCF
+# Agence-voyage
 Une application web (Express, node.js) pour gérer une base de donnée MySQL. Elle simule une plateforme de réservation de billets de train.
 
 # Description
